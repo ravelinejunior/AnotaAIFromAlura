@@ -2,6 +2,7 @@ package com.alura.anotaai.ui.notes
 
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
@@ -196,7 +197,13 @@ fun NoteScreen(
                                     )
                                 }
 
-                                IconButton(onClick = {}) {
+                                IconButton(onClick = {
+                                    pickImageLauncher.launch(
+                                        PickVisualMediaRequest(
+                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        )
+                                    )
+                                }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_gallery),
                                         contentDescription = "Adicionar imagem da galeria"
@@ -276,8 +283,10 @@ fun NoteScreen(
                 viewModel.updateShowCameraState(false)
             },
             onError = {
-                Toast.makeText(context,
-                    context.getString(R.string.error_save_image), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_save_image), Toast.LENGTH_SHORT
+                )
                     .show()
                 viewModel.updateShowCameraState(false)
             }
