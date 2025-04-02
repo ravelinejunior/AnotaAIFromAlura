@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.OptIn
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -55,7 +56,9 @@ fun CameraScreen(
     ) {
         val context = LocalContext.current
         val cameraController = remember {
-            LifecycleCameraController(context)
+            LifecycleCameraController(context).apply {
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            }
         }
 
         Box(
@@ -179,6 +182,7 @@ private fun capturePhoto(
             val correctedBitmap: Bitmap = image
                 .toBitmap()
                 .rotateBitmap(image.imageInfo.rotationDegrees)
+                .flipHorizontally()
 
             onPhotoCaptured(correctedBitmap)
             image.close()
@@ -188,6 +192,12 @@ private fun capturePhoto(
             Log.e("CameraContent", "Error ao capturar imagem", exception)
         }
     })
+}
+
+private fun Bitmap.flipHorizontally(): Bitmap {
+    val matrix = android.graphics.Matrix()
+    matrix.preScale(-1f, 1f)
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, false)
 }
 
 

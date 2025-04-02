@@ -82,7 +82,7 @@ fun HomeScreen(
 
     LaunchedEffect(state.notes) {
         while (!isSnackbarClickedOk) {
-            delay(7000) // Espera 7 segundos antes de exibir novamente
+            delay(7000)
 
             if (state.notes.isEmpty()) {
                 isSnackbarVisible = true
