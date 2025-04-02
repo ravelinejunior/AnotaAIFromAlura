@@ -1,5 +1,10 @@
 package com.alura.anotaai.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,11 +31,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -50,6 +63,7 @@ import com.alura.anotaai.R
 import com.alura.anotaai.extensions.toDisplayDate
 import com.alura.anotaai.model.Note
 import com.alura.anotaai.model.NoteType
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,9 +75,44 @@ fun HomeScreen(
 ) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val state by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var isSnackbarVisible by remember { mutableStateOf(false) }
+    var isSnackbarClickedOk by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(state.notes) {
+        while (!isSnackbarClickedOk) {
+            delay(7000) // Espera 7 segundos antes de exibir novamente
+
+            if (state.notes.isEmpty()) {
+                isSnackbarVisible = true
+
+                val result = snackbarHostState.showSnackbar(
+                    message = "A lista de notas está vazia!",
+                    actionLabel = "OK",
+                    duration = SnackbarDuration.Short
+                )
+
+                isSnackbarVisible = false
+
+                if (result == SnackbarResult.ActionPerformed) {
+                    isSnackbarClickedOk = true
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHost = {
+            AnimatedVisibility(
+                visible = isSnackbarVisible,
+                enter = slideInVertically { fullHeight -> -fullHeight } + fadeIn(),
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+            ) {
+                SnackbarHost(snackbarHostState)
+            }
+        },
         topBar = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -130,9 +179,11 @@ fun HomeScreen(
                             .size(500.dp)
                             .alpha(0.1f),
                     )
-                }else{
+                } else {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -209,11 +260,11 @@ fun ItemNote(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-           val thumbnail = when (note.thumbnail) {
-               NoteType.AUDIO.name -> R.drawable.ic_mic
-               NoteType.TEXT.name -> R.drawable.ic_title
-               else -> note.thumbnail
-           }
+            val thumbnail = when (note.thumbnail) {
+                NoteType.AUDIO.name -> R.drawable.ic_mic
+                NoteType.TEXT.name -> R.drawable.ic_title
+                else -> note.thumbnail
+            }
 
             Column(
                 modifier = Modifier
