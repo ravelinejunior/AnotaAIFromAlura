@@ -78,6 +78,13 @@ class NoteRepository @Inject constructor(
         }
     }
 
+    suspend fun deleteAllNotes() {
+        noteDao.deleteAllNotes()
+        textNoteDao.deleteAllNotes()
+        imageNoteDao.deleteAllNotes()
+        audioNoteDao.deleteAllNotes()
+    }
+
 }
 
 

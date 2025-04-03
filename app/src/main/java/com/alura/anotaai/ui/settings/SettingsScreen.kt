@@ -1,11 +1,14 @@
 package com.alura.anotaai.ui.settings
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -85,6 +88,36 @@ fun SettingsScreen(
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.secondary
                 )
+
+                Spacer(modifier = Modifier.size(50.dp))
+
+                // Text with amount of notes
+                Text(
+                    text = "Você tem ${state.notesCount} notas",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                // Animated button to delete all notes that changes color and size when pressed
+                Button(
+                    onClick = {
+                        viewModel.showDeleteDialog(true)
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Apagar todas notas",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+
             }
 
             if (state.showConfirmDeleteDialog) {
@@ -94,7 +127,11 @@ fun SettingsScreen(
                     text = { Text("Tem certeza que deseja excluir todas as notas?") },
                     confirmButton = {
                         Button(
-                            onClick = { viewModel.showDeleteDialog(false) }
+                            onClick = {
+                                viewModel.showDeleteDialog(false)
+                                viewModel.deleteAllNotes()
+                            }
+
                         ) {
                             Text("Sim")
                         }
