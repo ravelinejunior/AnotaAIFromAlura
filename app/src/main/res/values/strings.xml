@@ -7,7 +7,14 @@
     <string name="confirm_delete_note">Tem certeza que deseja excluir essa nota?</string>
     <string name="yes">Sim</string>
     <string name="not">Não</string>
-    <string name="write_your_note">Escreva sua nota aqui...</string>
+    <string name="write_your_note">Escreva sua nota aqui…</string>
     <string name="confirm_delete_item">Tem certeza que deseja excluir este item?</string>
     <string name="error_save_image">Erro ao salvar imagem</string>
+    <string name="configura_es">Configurações</string>
+    <string name="aqui_voc_gerencia_suas_notas_de_uma_maneira_mais_ampla_novas_fun_es_dispon_veis_em_breve">Aqui você gerencia suas notas de uma maneira mais ampla. Novas funções disponíveis em breve</string>
+    <string name="voc_tem_notas">Você tem %1$s notas</string>
+    <string name="apagar_todas_notas">Apagar todas notas</string>
+    <string name="tem_certeza_que_deseja_excluir_todas_as_notas">Tem certeza que deseja excluir todas as notas?</string>
+    <string name="sim">Sim</string>
+    <string name="n_o">Não</string>
 </resources>

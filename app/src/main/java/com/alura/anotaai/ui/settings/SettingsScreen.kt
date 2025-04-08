@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,7 +52,7 @@ fun SettingsScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = "Configurações",
+                            text = stringResource(R.string.configura_es),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -81,7 +82,7 @@ fun SettingsScreen(
                     modifier = Modifier.size(300.dp),
                 )
                 Text(
-                    text = "Aqui você gerencia suas notas de uma maneira mais ampla. Novas funções disponíveis em breve",
+                    text = stringResource(R.string.aqui_voc_gerencia_suas_notas_de_uma_maneira_mais_ampla_novas_fun_es_dispon_veis_em_breve),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp),
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
@@ -93,7 +94,7 @@ fun SettingsScreen(
 
                 // Text with amount of notes
                 Text(
-                    text = "Você tem ${state.notesCount} notas",
+                    text = stringResource(R.string.voc_tem_notas, state.notesCount),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp),
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
@@ -111,7 +112,7 @@ fun SettingsScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Apagar todas notas",
+                        text = stringResource(R.string.apagar_todas_notas),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -123,8 +124,8 @@ fun SettingsScreen(
             if (state.showConfirmDeleteDialog) {
                 AlertDialog(
                     onDismissRequest = { viewModel.showDeleteDialog(false) },
-                    title = { Text(text = "Apagar todas notas") },
-                    text = { Text("Tem certeza que deseja excluir todas as notas?") },
+                    title = { Text(text = stringResource(R.string.apagar_todas_notas)) },
+                    text = { Text(stringResource(R.string.tem_certeza_que_deseja_excluir_todas_as_notas)) },
                     confirmButton = {
                         Button(
                             onClick = {
@@ -133,14 +134,14 @@ fun SettingsScreen(
                             }
 
                         ) {
-                            Text("Sim")
+                            Text(stringResource(R.string.sim))
                         }
                     },
                     dismissButton = {
                         Button(
                             onClick = { viewModel.showDeleteDialog(false) }
                         ) {
-                            Text("Não")
+                            Text(stringResource(R.string.n_o))
                         }
                     }
                 )
