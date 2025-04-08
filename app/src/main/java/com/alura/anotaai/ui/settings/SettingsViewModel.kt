@@ -17,6 +17,17 @@ class SettingsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SettingsUiState())
     var uiState = _uiState.asStateFlow()
 
+    init {
+        getNotesCount()
+    }
+
+    private fun getNotesCount() {
+        viewModelScope.launch(IO) {
+            val count = noteRepository.getNotesCount()
+            _uiState.value = _uiState.value.copy(notesCount = count)
+        }
+    }
+
     fun showDeleteDialog(show: Boolean) {
         _uiState.value = _uiState.value.copy(showConfirmDeleteDialog = show)
     }

@@ -50,6 +50,10 @@ class NoteRepository @Inject constructor(
             .map { noteList -> noteList.map { it.toNote() }.sortedByDescending { it.date } }
     }
 
+    suspend fun getNotesCount(): Int {
+        return noteDao.getNotesCount()
+    }
+
     suspend fun getNoteById(noteId: String): Note? {
         val noteEntity = noteDao.getNoteById(noteId) ?: return null
         val textNotes = textNoteDao.getByIdMainNote(noteEntity.id).map { it.toNoteItemText() }
